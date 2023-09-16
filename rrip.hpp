@@ -30,10 +30,10 @@ template <typename T, typename KeyT = int> struct cache_t {
         KeyT key = hash_func(page);
 
         //
-        cache_node node = new cache_node;
-        node.first = key;
-        node.second.first = page; 
-        node.second.second = RRIPval_LONG;
+        auto node = new cache_node;
+        node->first = key;
+        node->second.first = page; 
+        node->second.second = RRIPval_LONG;
         //
 
         auto hit = hash_.find(key); 
@@ -52,13 +52,13 @@ template <typename T, typename KeyT = int> struct cache_t {
                 hash_.erase(fst_dist->first);      
                 cache_.erase(fst_dist); 
 
-                cache_.emplace(help, node);
-                hash_.emplace(key, *node);
+                cache_.emplace(help, *node);
+                hash_.emplace(key, node);
                 return false;
             } 
 
-            cache_.emplace_front(node);
-            hash_.emplace(key, *node);
+            cache_.emplace_front(*node);
+            hash_.emplace(key, node);
             return false;
         } 
         auto eltit = hit->second;
