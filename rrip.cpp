@@ -15,14 +15,20 @@ int main() {
 
     cin >> m >> n;
     assert(cin.good());
-    caches::cache_t<int> c{m};
+    caches<int, int> c(m);
+    //vector<T> elements; //for ideal cache 
+    //unordered_map <T, pair<int, list <int>>> data;
 
     for (int i = 0; i < n; ++i) {
         int q;
         cin >> q;
         assert(cin.good());
-        if (c.lookup_update(q, slow_get_page_int))
+        //elements.push_back(q);
+        
+        if (c.lookup_update(q))
             hits += 1;
+
+        //c.print_cache();
     }
 
     cout << hits << endl;
