@@ -1,1 +1,3 @@
 *.out 
+./ideal_cache
+supercache.hpp
