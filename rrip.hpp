@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace std;
 
 template <typename T, typename KeyT> class caches {
 
@@ -50,7 +49,7 @@ public:
         if (hit == hash_.end()) {
             if (full()) {
                 if (fst_dist == nullptr) {
-                    cache_back = next(cache_.end(), -1);
+                    cache_back = std::next(cache_.end(), -1);
                     int i = RRIPval_DIST - cache_back->rrip;
                     for (auto k = cache_.begin(); k != cache_.end(); k++) {
                         k->rrip += i;
@@ -80,18 +79,18 @@ public:
         } 
         auto eltit = hit->second;
         if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit, next(eltit));
+            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
         
         eltit->rrip = RRIPval_NEAR;
         return true;
     }    
     void print_cache() {
-        cout << "\n";
         for (auto k = cache_.begin(); k != cache_.end(); k++) {
-            cout << k->value << "(" << k->rrip << ") ";
+            std::cout << k->value << "(" << k->rrip << ") ";
         }
         if (fst_dist != nullptr)
-            cout << fst_dist->value;
+            std::cout << fst_dist->value << std::endl;
+
     }
 
 };
