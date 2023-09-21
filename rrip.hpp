@@ -29,13 +29,13 @@ static const int RRIPval_NEAR = 0;
     using ListIt = typename std::list<cache_node>::iterator;
     std::unordered_map<KeyT, ListIt> hash_;
 
-    cache_node* fst_dist;
+    cache_node* fst_dist = nullptr;;
     ListIt fst_dist_it;
     ListIt cache_back;
 
 public:
 
-    caches(size_t sz, cache_node* ptr = nullptr) : sz_(sz), fst_dist(ptr) {}
+    caches(size_t sz) : sz_(sz) {}
 
     bool full() const { return (cache_.size() == sz_); }
 
