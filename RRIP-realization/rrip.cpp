@@ -1,3 +1,7 @@
+/* A C++ program which shows implementation of 
+   Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement  */
+
+
 #include <iostream>
 #include <cassert>
 #include "rrip.hpp"
@@ -7,12 +11,12 @@ int slow_get_page_int(int key) {
 }
 
 int main() {
-    size_t m; //cache size
+    size_t cache_size; //cache size
     int n;    //number of upcoming elements
 
-    std::cin >> m >> n;
+    std::cin >> cache_size >> n;
     assert(std::cin.good());
-    caches<int, int> c(m);
+    caches<int, int> c(cache_size);
 
     int hits = 0;
 
