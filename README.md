@@ -1,7 +1,7 @@
 # RRIP-cpp
 Project name: RRIP-cache
 
-Contributors: Minimullina Aliya, Samoylov Georgy, Grishin Mikhail.
+Contributors: Minimullina Aliya.
 
 To install and run the code, follow these steps:
   (in process)
