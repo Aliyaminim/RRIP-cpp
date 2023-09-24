@@ -18,7 +18,7 @@ bool ideal_caches<T, KeyT>::lookup_update(const KeyT key, T (*slow_get_page)(Key
         abort();
     }
 
-    auto cur_node = el.second;
+    auto cur_node = el->second;
     auto hit = hash_.find(key);
 
     if (hit == hash_.end()) {

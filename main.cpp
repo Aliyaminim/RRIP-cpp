@@ -35,7 +35,7 @@ int main() {
         if (cur_node != c_ideal.nodes_info.end()) {
             cur_node->second.arr_of_positions.push_back(i);
         } else {
-            cache_node new_node = {q, slow_get_page_int(q), i};
+            ideal_caches<int, int>::cache_node new_node = {q, slow_get_page_int(q), {i}};
             c_ideal.nodes_info.emplace(q, new_node);
         }
         req_el.push_back(q);
@@ -49,7 +49,7 @@ int main() {
             hits_ideal++;
     }
      
-    if ((hits_ideal < 0) || (hits_rrip)) {
+    if ((hits_ideal < 0) || (hits_rrip < 0)) {
         std::cout << "wrongly count hits" << std::endl;
         abort();
     }
