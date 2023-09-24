@@ -23,7 +23,7 @@ int main() {
 
     ideal_caches<int, int> c_ideal(cache_size);
     int hits_ideal = 0;
-    vector<int> req_el;
+    std::vector<int> req_el;
   
 
     for (int i = 0; i < n; ++i) {
