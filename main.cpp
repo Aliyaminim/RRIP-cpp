@@ -1,5 +1,6 @@
 /* A C++ program which shows implementation of 
-   Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement  */
+   Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement  
+   and compares number of hits in RRIP with ideal cache*/
 
 
 #include <iostream>
