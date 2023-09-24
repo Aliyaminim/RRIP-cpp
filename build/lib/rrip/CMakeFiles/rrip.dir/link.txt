@@ -1,2 +1,0 @@
-/usr/bin/ar qc librrip.a CMakeFiles/rrip.dir/rrip.cpp.o
-/usr/bin/ranlib librrip.a
