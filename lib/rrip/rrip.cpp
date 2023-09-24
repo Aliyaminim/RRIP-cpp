@@ -1,16 +1,16 @@
-/* A C file that includes realization of the functions used in
+/* A C++ program that includes realization of the functions used in
    Static Re-Reference Interval Prediction(RRIP) Cache Replacement */
 
 #include "rrip.hpp"
 
 template <typename T, typename KeyT>
-caches<typename T, typename KeyT>::caches(size_t sz) : sz_(sz) {}
+caches<T, KeyT>::caches(size_t sz) : sz_(sz) {}
 
 template <typename T, typename KeyT>
-bool caches<typename T, typename KeyT>::full() const { return (cache_.size() == sz_); }
+bool caches<T, KeyT>::full() const { return (cache_.size() == sz_); }
 
 template <typename T, typename KeyT>
-bool caches<typename T, typename KeyT>::lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
+bool caches<T, KeyT>::lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
     T value = slow_get_page(key);
     cache_node node = {key, value, RRIPval_LONG};
 
@@ -58,7 +58,7 @@ bool caches<typename T, typename KeyT>::lookup_update(const KeyT key, T (*slow_g
 }    
 
 template <typename T, typename KeyT>
-void caches<typename T, typename KeyT>::print_cache() const {
+void caches<T, KeyT>::print_cache() const {
     std::cout << "\n";
     for (auto k = cache_.begin(); k != cache_.end(); k++) {
         std::cout << k->value << "(" << k->rrip << ") ";

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libideal_cache.a CMakeFiles/ideal_cache.dir/ideal_cache.cpp.o
+/usr/bin/ranlib libideal_cache.a

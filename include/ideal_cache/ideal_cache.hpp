@@ -1,3 +1,5 @@
+/* A header file to a C++ program which shows implementation of 
+   Ideal Cache Replacement */
 #pragma once 
 
 #include <iostream>

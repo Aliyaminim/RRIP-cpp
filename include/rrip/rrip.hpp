@@ -1,4 +1,4 @@
-/* A header file to a C program which shows implementation of 
+/* A header file to a C++ program which shows implementation of 
    Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement */
 
 #pragma once 

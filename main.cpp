@@ -3,9 +3,8 @@
    and compares number of hits in RRIP with ideal cache*/
 
 
-#include <iostream>
-#include <cassert>
-#include "rrip.hpp"
+#include "main.hpp"
+#include "rrip/rrip.hpp"
 
 int slow_get_page_int(int key) {
     return key;

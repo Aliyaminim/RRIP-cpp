@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/main.dir/main.cpp.o -o main  lib/rrip/librrip.a lib/ideal_cache/libideal_cache.a 
