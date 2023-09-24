@@ -13,6 +13,7 @@
 template <typename T, typename KeyT> class ideal_caches {
 
 public: 
+
     struct cache_node {
         KeyT key;
         T value;
