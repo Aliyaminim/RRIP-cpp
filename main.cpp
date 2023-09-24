@@ -5,6 +5,7 @@
 
 #include "main.hpp"
 #include "rrip/rrip.hpp"
+#include "ideal_cache/ideal_cache.hpp"
 
 int slow_get_page_int(int key) {
     return key;
