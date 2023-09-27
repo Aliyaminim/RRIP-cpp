@@ -37,8 +37,10 @@ int main() {
     for (int i = 0; i < n; ++i) {
         if (c_ideal.lookup_update(req_el[i], slow_get_page_int))
             hits_ideal++;
-
-        //c_ideal.print_cache();
+        
+        #ifdef DEBUG
+            c_ideal.print_cache();
+        #endif
     }
      
     if (hits_ideal < 0) {

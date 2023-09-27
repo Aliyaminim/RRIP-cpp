@@ -25,7 +25,9 @@ int main() {
         if (c_rrip.lookup_update(q, slow_get_page_int))
             hits_rrip++;
 
-        //c_rrip.print_cache();
+        #ifdef DEBUG
+            c_rrip.print_cache();
+        #endif
     }
      
     if (hits_rrip < 0) {
