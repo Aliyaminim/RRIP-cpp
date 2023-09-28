@@ -14,7 +14,6 @@
 
 template <typename T, typename KeyT> class caches {
 
-private :
     //RRIP value
     static const int RRIPval_DIST = 3;
     static const int RRIPval_LONG = 2;
@@ -23,7 +22,7 @@ private :
     struct cache_node {
         KeyT key;
         T value;
-        int rrip;
+        int rrip = RRIPval_LONG;
     };
 
     //size of cache
@@ -45,17 +44,15 @@ public:
 
     //implements RRIP-replacement while looking up update
     bool lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
-        T value = slow_get_page(key);
-        cache_node node = {key, value, RRIPval_LONG};
 
-        auto hit = hash_.find(node.key); 
+        auto hit = hash_.find(key); 
 
         if (hit == hash_.end()) {
             if (full()) {
                 if (fst_dist == cache_.end()) {
                     ListIt cache_back = std::prev(cache_.end());
                     int i = RRIPval_DIST - cache_back->rrip;
-                    for (auto k = cache_.begin(); k != cache_.end(); k++) {
+                    for (auto k = cache_.begin(); k != cache_.end(); ++k) {
                         k->rrip += i;
                         if ((k->rrip == RRIPval_DIST) && (fst_dist == cache_.end())) {
                             fst_dist = k;
@@ -66,17 +63,17 @@ public:
                 hash_.erase(fst_dist->key);      
                 cache_.erase(fst_dist);
 
-                cache_.emplace(second_dist, node);
+                cache_.emplace(second_dist, key, slow_get_page(key));
                 ListIt node_it = std::prev(second_dist);
-                hash_.emplace(node.key, node_it);
+                hash_.emplace(key, node_it);
 
                 fst_dist = second_dist;
                 return false;
             } 
 
-            cache_.emplace_back(node);
+            cache_.emplace_back(key, slow_get_page(key));
             ListIt cache_back = std::prev(cache_.end());
-            hash_.emplace(node.key, cache_back);
+            hash_.emplace(key, cache_back);
             return false;
         } 
 
@@ -85,7 +82,7 @@ public:
             fst_dist = std::next(fst_dist);
 
         if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
+            cache_.splice(cache_.begin(), cache_, eltit);
         
         eltit->rrip = RRIPval_NEAR;
         return true;
@@ -93,12 +90,13 @@ public:
 
     //prints cache
     void print_cache() const {
-        std::cout << "\n";
-        for (auto k = cache_.begin(); k != cache_.end(); k++) {
+        for (auto k = cache_.begin(); k != cache_.end(); ++k) {
             std::cout << k->value << "(" << k->rrip << ") ";
         }
         if (fst_dist != cache_.end())
             std::cout << fst_dist->value;
+
+        std::cout << std::endl;
     }
 
 };
