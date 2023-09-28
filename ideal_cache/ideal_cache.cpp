@@ -40,6 +40,7 @@ int main() {
         
         #ifdef DEBUG
             c_ideal.print_cache();
+            std::cout << hits_ideal << std::endl;
         #endif
     }
      
