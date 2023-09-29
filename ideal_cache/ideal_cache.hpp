@@ -1,5 +1,8 @@
 /* A header file to a C++ program which shows implementation of 
-   Ideal Cache Replacement */
+   Ideal Cache Replacement 
+   
+   NOTE: If a incoming page is rereferenced later than others in cache, this incoming page 
+   will be ignored and cache will remain unchanged*/
 #pragma once 
 
 #include <iostream>
@@ -39,10 +42,11 @@ public:
         }
 
         el->second.arr_of_positions.erase(el->second.arr_of_positions.begin());
-        auto cur_node = el->second;
+       
         auto hit = hash_.find(key);
 
         if (hit == hash_.end()) {
+            auto cur_node = el->second; 
             if (full()) {
                 if (cur_node.arr_of_positions.size() == 0) {
                     return false;
@@ -50,10 +54,10 @@ public:
                 int reref_pos = cur_node.arr_of_positions[0];
                 int maxcache_reref_pos = -1;
                 ListIt rm_node;
-                for (auto k = cache_.begin(); k != cache_.end(); k++) {
+                for (auto k = cache_.begin(); k != cache_.end(); ++k) {
                     auto node_data = nodes_info.find(k->key);
                     if (node_data->second.arr_of_positions.size() == 0) {
-                        maxcache_reref_pos = reref_pos + 1; //it definitely will be replaced
+                        maxcache_reref_pos = reref_pos + 5; //it definitely will be replaced
                         rm_node = k;
                         break;
                     }
@@ -80,10 +84,10 @@ public:
 
     //prints cache
     void print_cache() const {
-        for (auto k = cache_.begin(); k != cache_.end(); k++) {
+        for (auto k = cache_.begin(); k != cache_.end(); ++k) {
             std::cout << k->value << " ";
         }
-        //std::cout << std::endl;
+        std::cout << std::endl;
     }
 
 

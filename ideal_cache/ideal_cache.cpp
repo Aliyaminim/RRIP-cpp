@@ -35,12 +35,11 @@ int main() {
     }
 
     for (int i = 0; i < n; ++i) {
-        if (c_ideal.lookup_update(req_el[i], slow_get_page_int))
+        if (c_ideal.lookup_update(req_el[i], slow_get_page_int)) 
             hits_ideal++;
         
         #ifdef DEBUG
             c_ideal.print_cache();
-            std::cout << hits_ideal << std::endl;
         #endif
     }
      
