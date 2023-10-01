@@ -13,11 +13,13 @@
 #include <deque>
 #include <vector>
 
+namespace Ideal_cache {
 
 template <typename T, typename KeyT> class ideal_cache {
 
 private:
-    static const int MINCACHE_REREF_POS = 0;
+    static const int MINCACHE_REREF_POS_ = 0;
+    static const int MAXCACHE_REREF_POS_ = 2147483647;
 
     size_t sz_;
 
@@ -62,12 +64,12 @@ public:
                     return false;
                 }
                 int reref_pos = cur_node.arr_of_positions[0];
-                int maxcache_reref_pos = MINCACHE_REREF_POS;
+                int maxcache_reref_pos = MINCACHE_REREF_POS_;
                 ListIt rm_node;
                 for (auto k = cache_.begin(); k != cache_.end(); ++k) {
                     auto node_data = nodes_info_.find(k->key);
                     if (node_data->second.arr_of_positions.empty()) {
-                        maxcache_reref_pos = reref_pos + 5; //it definitely will be replaced
+                        maxcache_reref_pos = MAXCACHE_REREF_POS_; //it definitely will be replaced
                         rm_node = k;
                         break;
                     }
@@ -92,6 +94,7 @@ public:
         return true;
     }
 
+    // fills in nodes_info_ unordered map with information about each upcoming key
     void data_fill(KeyT q, int i) {
         auto cur_node = nodes_info_.find(q);
         if (cur_node != nodes_info_.end()) {
@@ -109,3 +112,4 @@ public:
         std::cout << std::endl;
     }
 };
+}

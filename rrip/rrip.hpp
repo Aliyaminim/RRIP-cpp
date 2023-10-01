@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace Rrip_cache {
 
 template <typename T, typename KeyT> class rrip_cache {
 
@@ -99,3 +100,4 @@ public:
     }
 
 };
+}
