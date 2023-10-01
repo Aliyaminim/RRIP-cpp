@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <list>
 #include <unordered_map>
+#include <deque>
 #include <vector>
 
 
@@ -21,7 +22,7 @@ public:
     struct cache_node {
         KeyT key;
         T value;
-        std::vector<int> arr_of_positions; //stores request positions
+        std::deque<int> arr_of_positions; //stores request positions
     };
 
     //stores information about all upcoming nodes
@@ -41,14 +42,14 @@ public:
             abort();
         }
 
-        el->second.arr_of_positions.erase(el->second.arr_of_positions.begin());
+        el->second.arr_of_positions.pop_front();
        
         auto hit = hash_.find(key);
 
         if (hit == hash_.end()) {
             auto cur_node = el->second; 
             if (full()) {
-                if (cur_node.arr_of_positions.size() == 0) {
+                if (cur_node.arr_of_positions.empty()) {
                     return false;
                 }
                 int reref_pos = cur_node.arr_of_positions[0];
@@ -84,8 +85,8 @@ public:
 
     //prints cache
     void print_cache() const {
-        for (auto k = cache_.begin(); k != cache_.end(); ++k) {
-            std::cout << k->value << " ";
+        for (auto k : cache_) {
+            std::cout << k.value << " ";
         }
         std::cout << std::endl;
     }

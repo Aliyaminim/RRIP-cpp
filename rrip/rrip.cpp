@@ -15,8 +15,9 @@ int main() {
     assert(std::cin.good());
 
     caches<int, int> c_rrip(cache_size);
-    int hits_rrip = 0;
 
+    int hits_rrip = 0;
+    
     for (int i = 0; i < n; ++i) {
         int q;
         std::cin >> q;

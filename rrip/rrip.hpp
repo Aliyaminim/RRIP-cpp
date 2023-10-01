@@ -79,7 +79,7 @@ public:
 
         auto eltit = hit->second;
         if (eltit == fst_dist)
-            fst_dist = std::next(fst_dist);
+            ++fst_dist;
 
         if (eltit != cache_.begin())
             cache_.splice(cache_.begin(), cache_, eltit);
