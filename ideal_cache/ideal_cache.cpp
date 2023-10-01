@@ -13,7 +13,7 @@ int main() {
     std::cin >> cache_size >> n;
     assert(std::cin.good());
 
-    ideal_caches<int, int> c_ideal(cache_size);
+    ideal_cache<int, int> c_ideal(cache_size);
 
     std::vector<int> req_el;
   
@@ -22,13 +22,14 @@ int main() {
         std::cin >> q;
         assert(std::cin.good());
         req_el.push_back(q);
+
+        //c_ideal.data_fill(q, i);
         
-        auto cur_node = c_ideal.nodes_info.find(q);
-        if (cur_node != c_ideal.nodes_info.end()) {
+        auto cur_node = c_ideal.nodes_info_.find(q);
+        if (cur_node != c_ideal.nodes_info_.end()) {
             cur_node->second.arr_of_positions.push_back(i);
         } else {
-            ideal_caches<int, int>::cache_node new_node = {q, slow_get_page_int(q), {i}};
-            c_ideal.nodes_info.emplace(q, new_node);
+            c_ideal.nodes_info_.emplace(q, ideal_cache<int, int>::node_data_{q, {i}});
         }
     }
 

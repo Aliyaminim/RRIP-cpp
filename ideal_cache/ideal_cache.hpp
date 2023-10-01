@@ -14,31 +14,37 @@
 #include <vector>
 
 
-template <typename T, typename KeyT> class ideal_caches {
+template <typename T, typename KeyT> class ideal_cache {
 
 private:
-    static MINCACHE_REREF_POS = 0;
+    static const int MINCACHE_REREF_POS = 0;
 
     size_t sz_;
 
-    std::list<cache_node> cache_;
-    using ListIt = typename std::list<cache_node>::iterator;
+    struct cache_node_ {
+        KeyT key;
+        T value;
+    };
+
+    std::list<cache_node_> cache_;
+    using ListIt = typename std::list<cache_node_>::iterator;
 
     std::unordered_map<KeyT, ListIt> hash_;
 
-public: 
-
-    struct cache_node {
+    struct node_data_ {
         KeyT key;
-        T value;
         std::deque<int> arr_of_positions; //stores request positions
     };
 
     //stores information about all upcoming nodes
-    std::unordered_map<KeyT, cache_node> nodes_info; 
+    std::unordered_map<KeyT, node_data_> nodes_info_; 
+
+public: 
+
+    //void data_fill(KeyT q, i);
 
     //constructor
-    ideal_caches(size_t sz) : sz_(sz) {}
+    ideal_cache(size_t sz) : sz_(sz) {}
 
     //checks if cache is already full
     bool full() const { return (cache_.size() == sz_); };
@@ -46,8 +52,8 @@ public:
     //implements RRIP-replacement while looking up update
     bool lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
 
-        auto el = nodes_info.find(key);
-        assert((el != nodes_info.end()) && "Check how you process input, pay attention to forming of nodes_info");
+        auto el = nodes_info_.find(key);
+        assert((el != nodes_info_.end()) && "Check how you process input, pay attention to forming of nodes_info");
         auto &cur_node = el->second;
         cur_node.arr_of_positions.pop_front();
        
@@ -62,7 +68,7 @@ public:
                 int maxcache_reref_pos = MINCACHE_REREF_POS;
                 ListIt rm_node;
                 for (auto k = cache_.begin(); k != cache_.end(); ++k) {
-                    auto node_data = nodes_info.find(k->key);
+                    auto node_data = nodes_info_.find(k->key);
                     if (node_data->second.arr_of_positions.empty()) {
                         maxcache_reref_pos = reref_pos + 5; //it definitely will be replaced
                         rm_node = k;
@@ -81,7 +87,7 @@ public:
                     cache_.erase(rm_node);
                 }                   
             } 
-            cache_.emplace_back(cur_node);
+            cache_.emplace_back(key, slow_get_page(key));
             ListIt cache_back = std::prev(cache_.end());
             hash_.emplace(key, cache_back);
             return false;

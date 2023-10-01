@@ -13,7 +13,7 @@ int main() {
     std::cin >> cache_size >> n;
     assert(std::cin.good());
 
-    caches<int, int> c_rrip(cache_size);
+    rrip_cache<int, int> c_rrip(cache_size);
 
     int hits_rrip = 0;
 

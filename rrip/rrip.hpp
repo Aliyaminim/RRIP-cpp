@@ -11,7 +11,7 @@
 #include <vector>
 
 
-template <typename T, typename KeyT> class caches {
+template <typename T, typename KeyT> class rrip_cache {
 
     //RRIP value
     static const int RRIPval_DIST = 3;
@@ -36,7 +36,7 @@ template <typename T, typename KeyT> class caches {
 
 public:
     //constructor
-    caches(size_t sz) : sz_(sz) {}
+    rrip_cache(size_t sz) : sz_(sz) {}
 
     //checks if cache is already full
     bool full() const { return (cache_.size() == sz_); };
