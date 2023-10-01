@@ -40,9 +40,6 @@ private:
     std::unordered_map<KeyT, node_data_> nodes_info_; 
 
 public: 
-
-    //void data_fill(KeyT q, i);
-
     //constructor
     ideal_cache(size_t sz) : sz_(sz) {}
 
@@ -93,6 +90,15 @@ public:
             return false;
         } 
         return true;
+    }
+
+    void data_fill(KeyT q, int i) {
+        auto cur_node = nodes_info_.find(q);
+        if (cur_node != nodes_info_.end()) {
+            cur_node->second.arr_of_positions.push_back(i);
+        } else {
+            nodes_info_.emplace(q, node_data_{q, {i}});
+        }
     }
 
     //prints cache

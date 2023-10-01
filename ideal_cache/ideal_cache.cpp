@@ -23,14 +23,7 @@ int main() {
         assert(std::cin.good());
         req_el.push_back(q);
 
-        //c_ideal.data_fill(q, i);
-        
-        auto cur_node = c_ideal.nodes_info_.find(q);
-        if (cur_node != c_ideal.nodes_info_.end()) {
-            cur_node->second.arr_of_positions.push_back(i);
-        } else {
-            c_ideal.nodes_info_.emplace(q, ideal_cache<int, int>::node_data_{q, {i}});
-        }
+        c_ideal.data_fill(q, i);
     }
 
     int hits_ideal = 0;
