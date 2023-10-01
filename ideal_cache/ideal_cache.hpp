@@ -43,7 +43,7 @@ private:
 
 public: 
     //constructor
-    ideal_cache(size_t sz) : sz_(sz) {}
+    explicit ideal_cache(size_t sz) : sz_(sz) {}
 
     //checks if cache is already full
     bool full() const { return (cache_.size() == sz_); };

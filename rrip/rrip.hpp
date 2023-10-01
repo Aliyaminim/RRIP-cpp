@@ -37,7 +37,7 @@ template <typename T, typename KeyT> class rrip_cache {
 
 public:
     //constructor
-    rrip_cache(size_t sz) : sz_(sz) {}
+    explicit rrip_cache(size_t sz) : sz_(sz) {}
 
     //checks if cache is already full
     bool full() const { return (cache_.size() == sz_); };
