@@ -17,7 +17,7 @@ int main() {
     caches<int, int> c_rrip(cache_size);
 
     int hits_rrip = 0;
-    
+
     for (int i = 0; i < n; ++i) {
         int q;
         std::cin >> q;
@@ -31,10 +31,8 @@ int main() {
         #endif
     }
      
-    if (hits_rrip < 0) {
-        std::cout << "In RRIP realization it wrongly counts hits" << std::endl;
-        abort();
-    }
+    assert((hits_rrip >= 0) && "In RRIP realization it wrongly counts hits");
+    
     std::cout << "RRIP cache hits: " << hits_rrip << std::endl;
     return 0;
 }

@@ -36,12 +36,9 @@ public:
 
     //implements RRIP-replacement while looking up update
     bool lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
-        auto el = nodes_info.find(key);
-        if (el == nodes_info.end()) {
-            std::cout << "Check how you process input, pay attention to forming of nodes_info" << std::endl;
-            abort();
-        }
 
+        auto el = nodes_info.find(key);
+        assert((el != nodes_info.end()) && "Check how you process input, pay attention to forming of nodes_info");
         el->second.arr_of_positions.pop_front();
        
         auto hit = hash_.find(key);

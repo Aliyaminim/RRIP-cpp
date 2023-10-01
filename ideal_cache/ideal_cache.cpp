@@ -44,10 +44,8 @@ int main() {
         #endif
     }
      
-    if (hits_ideal < 0) {
-        std::cout << "In ideal_cache realization it wrongly counts hits" << std::endl;
-        abort();
-    }
+    assert((hits_ideal >= 0) && "In ideal_cache realization it wrongly counts hits");
+    
     std::cout << "Ideal_cache cache hits: " << hits_ideal << std::endl;
     return 0;
 }
