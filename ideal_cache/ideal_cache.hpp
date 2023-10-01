@@ -1,7 +1,6 @@
-/* A header file to a C++ program which shows implementation of 
-   Ideal Cache Replacement 
+/* Ideal Cache Replacement 
    
-   NOTE: If a incoming page is rereferenced later than others in cache, this incoming page 
+   NOTE: If an incoming page is rereferenced later than others in cache, this incoming page 
    will be ignored and cache will remain unchanged*/
 #pragma once 
 
@@ -16,6 +15,16 @@
 
 
 template <typename T, typename KeyT> class ideal_caches {
+
+private:
+    static MINCACHE_REREF_POS = 0;
+
+    size_t sz_;
+
+    std::list<cache_node> cache_;
+    using ListIt = typename std::list<cache_node>::iterator;
+
+    std::unordered_map<KeyT, ListIt> hash_;
 
 public: 
 
@@ -39,22 +48,22 @@ public:
 
         auto el = nodes_info.find(key);
         assert((el != nodes_info.end()) && "Check how you process input, pay attention to forming of nodes_info");
-        el->second.arr_of_positions.pop_front();
+        auto &cur_node = el->second;
+        cur_node.arr_of_positions.pop_front();
        
         auto hit = hash_.find(key);
 
         if (hit == hash_.end()) {
-            auto cur_node = el->second; 
             if (full()) {
                 if (cur_node.arr_of_positions.empty()) {
                     return false;
                 }
                 int reref_pos = cur_node.arr_of_positions[0];
-                int maxcache_reref_pos = -1;
+                int maxcache_reref_pos = MINCACHE_REREF_POS;
                 ListIt rm_node;
                 for (auto k = cache_.begin(); k != cache_.end(); ++k) {
                     auto node_data = nodes_info.find(k->key);
-                    if (node_data->second.arr_of_positions.size() == 0) {
+                    if (node_data->second.arr_of_positions.empty()) {
                         maxcache_reref_pos = reref_pos + 5; //it definitely will be replaced
                         rm_node = k;
                         break;
@@ -87,14 +96,4 @@ public:
         }
         std::cout << std::endl;
     }
-
-
-private:
-
-    size_t sz_;
-
-    std::list<cache_node> cache_;
-    using ListIt = typename std::list<cache_node>::iterator;
-
-    std::unordered_map<KeyT, ListIt> hash_;
 };

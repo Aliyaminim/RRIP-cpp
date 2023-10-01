@@ -1,5 +1,4 @@
-/* A C++ program that includes realization of the functions used in
-   Static Re-Reference Interval Prediction(RRIP) Cache Replacement */
+/* Static Re-Reference Interval Prediction(RRIP) Cache Replacement: driver program */
 
 #include "rrip.hpp"
 

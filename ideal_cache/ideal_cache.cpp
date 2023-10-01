@@ -1,5 +1,4 @@
-/* A C++ program that includes realization of the functions used in
-   Ideal Cache Replacement */
+/* Ideal Cache Replacement: driver program */
 
 #include "ideal_cache.hpp"
 

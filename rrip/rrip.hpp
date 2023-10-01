@@ -1,5 +1,4 @@
-/* A header file to a C++ program which shows implementation of 
-   Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement */
+/* Static Re-Reference Interval Prediction(RRIP) in High Perfomance Cache Replacement */
 
 #pragma once 
 
@@ -90,8 +89,8 @@ public:
 
     //prints cache
     void print_cache() const {
-        for (auto k = cache_.begin(); k != cache_.end(); ++k) {
-            std::cout << k->value << "(" << k->rrip << ") ";
+        for (auto k : cache_) {
+            std::cout << k.value << "(" << k.rrip << ") ";
         }
         if (fst_dist != cache_.end())
             std::cout << fst_dist->value;
