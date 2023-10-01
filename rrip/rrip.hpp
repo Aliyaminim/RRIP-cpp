@@ -35,6 +35,45 @@ template <typename T, typename KeyT> class rrip_cache {
 
     std::unordered_map<KeyT, ListIt> hash_;
 
+    //looks for fst_dist and updates if it's necessary
+    void look_for_fstdist() {
+        if (fst_dist == cache_.end()) {
+            ListIt cache_back = std::prev(cache_.end());
+            int i = RRIPval_DIST - cache_back->rrip;
+            for (auto k = cache_.begin(); k != cache_.end(); ++k) {
+                k->rrip += i;
+                if ((k->rrip == RRIPval_DIST) && (fst_dist == cache_.end())) {
+                    fst_dist = k;
+                }
+            }
+        }
+    }
+
+    //deletes from cache and hash node which has RRIPval_DIST and updates fst_dist  
+    void delete_cachenode() {
+        ListIt second_dist = std::next(fst_dist);
+        hash_.erase(fst_dist->key);      
+        cache_.erase(fst_dist);
+        fst_dist = second_dist;
+    }
+    
+    //inserts new node to both cache and hash
+    void insert_node(const KeyT key, T (*slow_get_page)(KeyT)) {
+        cache_.emplace(fst_dist, key, slow_get_page(key));
+        ListIt node_it = std::prev(fst_dist);
+        hash_.emplace(key, node_it);
+    }
+
+    //processes cache hit
+    void cache_hit(ListIt eltit) {
+        if (eltit == fst_dist)
+            ++fst_dist;
+        if (eltit != cache_.begin())
+            cache_.splice(cache_.begin(), cache_, eltit);
+     
+        eltit->rrip = RRIPval_NEAR;
+    }
+
 public:
     //constructor
     explicit rrip_cache(size_t sz) : sz_(sz) {}
@@ -44,49 +83,22 @@ public:
 
     //implements RRIP-replacement while looking up update
     bool lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
-
         auto hit = hash_.find(key); 
 
         if (hit == hash_.end()) {
+            //cache miss
             if (full()) {
-                if (fst_dist == cache_.end()) {
-                    ListIt cache_back = std::prev(cache_.end());
-                    int i = RRIPval_DIST - cache_back->rrip;
-                    for (auto k = cache_.begin(); k != cache_.end(); ++k) {
-                        k->rrip += i;
-                        if ((k->rrip == RRIPval_DIST) && (fst_dist == cache_.end())) {
-                            fst_dist = k;
-                        }
-                    }
-                }
-                ListIt second_dist = std::next(fst_dist);
-                hash_.erase(fst_dist->key);      
-                cache_.erase(fst_dist);
-
-                cache_.emplace(second_dist, key, slow_get_page(key));
-                ListIt node_it = std::prev(second_dist);
-                hash_.emplace(key, node_it);
-
-                fst_dist = second_dist;
-                return false;
+                look_for_fstdist();
+                delete_cachenode();
             } 
-
-            cache_.emplace_back(key, slow_get_page(key));
-            ListIt cache_back = std::prev(cache_.end());
-            hash_.emplace(key, cache_back);
+            insert_node(key, slow_get_page);
             return false;
         } 
-
+        //cache hit
         auto eltit = hit->second;
-        if (eltit == fst_dist)
-            ++fst_dist;
-
-        if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit);
-        
-        eltit->rrip = RRIPval_NEAR;
+        cache_hit(eltit);
         return true;
-}    
+    }    
 
     //prints cache
     void print_cache() const {

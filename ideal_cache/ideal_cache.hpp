@@ -49,7 +49,7 @@ private:
         return el->second;
     }
 
-    //deletes from cache node, which will be rereferenced later than others(see NOTE above)
+    //deletes from cache and hash node, which will be rereferenced later than others(see NOTE above)
     bool delete_cachenode (const KeyT key, node_data_ &cur_node) {
         int reref_pos = cur_node.arr_of_positions[0];
         int maxcache_reref_pos = MINCACHE_REREF_POS_;
@@ -76,8 +76,8 @@ private:
         } 
     }
     
-    //inserts new node to cache 
-    void insert_cachenode(const KeyT key, T (*slow_get_page)(KeyT)) {
+    //inserts new node to both cache and hash
+    void insert_node(const KeyT key, T (*slow_get_page)(KeyT)) {
         cache_.emplace_back(key, slow_get_page(key));
         ListIt cache_back = std::prev(cache_.end());
         hash_.emplace(key, cache_back); 
@@ -98,13 +98,14 @@ public:
         if (hit == hash_.end()) {
             if (full()) {
                 if (cur_node.arr_of_positions.empty()) {
-                    return false; //this page will never be rereferenced, we ignore it
+                    //this page will never be rereferenced, so we ignore it
+                    return false; 
                 }
                 if (delete_cachenode(key, cur_node))
-                    insert_cachenode(key, slow_get_page); 
+                    insert_node(key, slow_get_page); 
                 return false;  
             } 
-            insert_cachenode(key, slow_get_page);         
+            insert_node(key, slow_get_page);         
             return false;
         } 
         return true;
