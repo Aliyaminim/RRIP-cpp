@@ -41,6 +41,48 @@ private:
     //stores information about all upcoming nodes
     std::unordered_map<KeyT, node_data_> nodes_info_; 
 
+    //updates node's data and return it
+    node_data_ upd_node_data(const KeyT key) {
+        auto el = nodes_info_.find(key);
+        assert((el != nodes_info_.end()) && "Check how you process input, pay attention to forming of nodes_info");
+        el->second.arr_of_positions.pop_front();
+        return el->second;
+    }
+
+    //deletes from cache node, which will be rereferenced later than others(see NOTE above)
+    bool delete_cachenode (const KeyT key, node_data_ &cur_node) {
+        int reref_pos = cur_node.arr_of_positions[0];
+        int maxcache_reref_pos = MINCACHE_REREF_POS_;
+        ListIt rm_node;
+        for (auto k = cache_.begin(); k != cache_.end(); ++k) {
+            auto node_data = nodes_info_.find(k->key);
+            if (node_data->second.arr_of_positions.empty()) {
+                maxcache_reref_pos = MAXCACHE_REREF_POS_; 
+                rm_node = k;
+                break;
+            }
+            int cur_reref_pos = node_data->second.arr_of_positions[0];
+            if (cur_reref_pos > maxcache_reref_pos) {
+                maxcache_reref_pos = cur_reref_pos;
+                rm_node = k;
+            }             
+        }
+        if (maxcache_reref_pos < reref_pos) {
+            return false;
+        } else {
+            hash_.erase(rm_node->key);
+            cache_.erase(rm_node);
+            return true;
+        } 
+    }
+    
+    //inserts new node to cache 
+    void insert_cachenode(const KeyT key, T (*slow_get_page)(KeyT)) {
+        cache_.emplace_back(key, slow_get_page(key));
+        ListIt cache_back = std::prev(cache_.end());
+        hash_.emplace(key, cache_back); 
+    }
+
 public: 
     //constructor
     explicit ideal_cache(size_t sz) : sz_(sz) {}
@@ -50,45 +92,19 @@ public:
 
     //implements RRIP-replacement while looking up update
     bool lookup_update(const KeyT key, T (*slow_get_page)(KeyT)) {
-
-        auto el = nodes_info_.find(key);
-        assert((el != nodes_info_.end()) && "Check how you process input, pay attention to forming of nodes_info");
-        auto &cur_node = el->second;
-        cur_node.arr_of_positions.pop_front();
-       
+        auto cur_node = upd_node_data(key);     
         auto hit = hash_.find(key);
 
         if (hit == hash_.end()) {
             if (full()) {
                 if (cur_node.arr_of_positions.empty()) {
-                    return false;
+                    return false; //this page will never be rereferenced, we ignore it
                 }
-                int reref_pos = cur_node.arr_of_positions[0];
-                int maxcache_reref_pos = MINCACHE_REREF_POS_;
-                ListIt rm_node;
-                for (auto k = cache_.begin(); k != cache_.end(); ++k) {
-                    auto node_data = nodes_info_.find(k->key);
-                    if (node_data->second.arr_of_positions.empty()) {
-                        maxcache_reref_pos = MAXCACHE_REREF_POS_; //it definitely will be replaced
-                        rm_node = k;
-                        break;
-                    }
-                    int cur_reref_pos = node_data->second.arr_of_positions[0];
-                    if (cur_reref_pos > maxcache_reref_pos) {
-                        maxcache_reref_pos = cur_reref_pos;
-                        rm_node = k;
-                    }             
-                }
-                if (maxcache_reref_pos < reref_pos) {
-                    return false;
-                } else {
-                    hash_.erase(rm_node->key);
-                    cache_.erase(rm_node);
-                }                   
+                if (delete_cachenode(key, cur_node))
+                    insert_cachenode(key, slow_get_page); 
+                return false;  
             } 
-            cache_.emplace_back(key, slow_get_page(key));
-            ListIt cache_back = std::prev(cache_.end());
-            hash_.emplace(key, cache_back);
+            insert_cachenode(key, slow_get_page);         
             return false;
         } 
         return true;
