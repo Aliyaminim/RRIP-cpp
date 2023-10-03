@@ -1,5 +1,7 @@
 /* Ideal Cache Replacement: driver program */
 
+#include <vector>
+#include <cassert>
 #include "ideal_cache.hpp"
 
 int slow_get_page_int(int key) {
@@ -37,7 +39,7 @@ int main() {
         #endif
     }
      
-    assert((hits_ideal >= 0) && "In ideal_cache realization it wrongly counts hits");
+    assert((hits_ideal >= 0) && "Number of cache hits should be positive");
     
     std::cout << "Ideal_cache cache hits: " << hits_ideal << std::endl;
     return 0;

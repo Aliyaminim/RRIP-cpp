@@ -1,5 +1,7 @@
 /* Static Re-Reference Interval Prediction(RRIP) Cache Replacement: driver program */
 
+#include <vector>
+#include <cassert>
 #include "rrip.hpp"
 
 int slow_get_page_int(int key) {
@@ -30,7 +32,7 @@ int main() {
         #endif
     }
      
-    assert((hits_rrip >= 0) && "In RRIP realization it wrongly counts hits");
+    assert((hits_rrip >= 0) && "Number of cache hits should be positive");
     
     std::cout << "RRIP cache hits: " << hits_rrip << std::endl;
     return 0;

@@ -5,13 +5,11 @@
 #pragma once 
 
 #include <iostream>
-#include <cassert>
 #include <iterator>
 #include <cstdlib>
 #include <list>
 #include <unordered_map>
 #include <deque>
-#include <vector>
 
 namespace caches {
 
