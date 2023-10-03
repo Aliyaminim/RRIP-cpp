@@ -1,6 +1,5 @@
 /* Static Re-Reference Interval Prediction(RRIP) Cache Replacement: driver program */
 
-#include <vector>
 #include <cassert>
 #include "rrip.hpp"
 
