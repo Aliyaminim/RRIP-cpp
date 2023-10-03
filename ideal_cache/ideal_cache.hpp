@@ -13,7 +13,7 @@
 #include <deque>
 #include <vector>
 
-namespace Ideal_cache {
+namespace caches {
 
 template <typename T, typename KeyT> class ideal_cache {
 

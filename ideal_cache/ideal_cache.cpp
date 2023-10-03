@@ -13,7 +13,7 @@ int main() {
     std::cin >> cache_size >> n;
     assert(std::cin.good());
 
-    Ideal_cache::ideal_cache<int, int> c_ideal(cache_size);
+    caches::ideal_cache<int, int> c_ideal(cache_size);
 
     std::vector<int> req_el;
   
