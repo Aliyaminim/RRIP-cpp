@@ -21,6 +21,9 @@ template <typename T, typename KeyT> class rrip_cache {
         KeyT key;
         T value;
         int rrip = RRIPval_LONG;
+
+        //constructor 
+        cache_node(KeyT key_, T value_) : key(key_), value(value_) {};
     };
 
     //size of cache
@@ -57,7 +60,8 @@ template <typename T, typename KeyT> class rrip_cache {
     
     //inserts new node to both cache and hash
     void insert_node(const KeyT key, T (*slow_get_page)(KeyT)) {
-        cache_.emplace(fst_dist, key, slow_get_page(key));
+        cache_.emplace(fst_dist, key, slow_get_page(key)); 
+        //The error message suggests that there is no matching constructor for the cache_node class that takes two arguments - a const int reference and an int.
         ListIt node_it = std::prev(fst_dist);
         hash_.emplace(key, node_it);
     }
